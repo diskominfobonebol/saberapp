@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ShareBerita\ShareBeritaRequest;
 use App\Http\Requests\ShareBerita\ShareBeritaRequestStore;
+use App\Http\Resources\ShareBeritaResource;
 use App\Models\ShareBerita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -30,5 +31,16 @@ class ShareBeritaController extends Controller
                 'error' => $e->getMessage(),
             ]);
         }
+    }
+
+    public function index($id)
+    {
+        $shareBeritas = ShareBerita::where('pegawai_id', $id)->get();
+        return response()->json([
+            'status' => true,
+            'code' => 200,
+            'message' => 'Share Berita berhasil diambil',
+            'data' => ShareBeritaResource::collection($shareBeritas),
+        ]);
     }
 }

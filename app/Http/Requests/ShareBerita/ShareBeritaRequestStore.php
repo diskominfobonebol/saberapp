@@ -3,6 +3,7 @@
 namespace App\Http\Requests\ShareBerita;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ShareBeritaRequestStore extends FormRequest
 {
@@ -24,7 +25,14 @@ class ShareBeritaRequestStore extends FormRequest
         return [
             'pegawai_id' => 'required|exists:pegawais,id',
             'berita_id' => 'required',
-            'berita_title' => 'required|string',
+            'berita_title' => [
+                'required',
+                'string',
+                Rule::unique('share_beritas', 'berita_title')
+                    ->where(function ($query) {
+                        return $query->where('platform', $this->platform);
+                    }),
+            ],
             'platform' => 'required|string',
             'url_berita' => 'required|string',
             'tanggal_share' => 'required|date',
@@ -35,17 +43,14 @@ class ShareBeritaRequestStore extends FormRequest
     {
         return [
             'pegawai_id.required' => 'Pegawai ID harus diisi',
+            'pegawai_id.exists' => 'Pegawai ID tidak ditemukan',
             'berita_id.required' => 'Berita ID harus diisi',
             'berita_title.required' => 'Berita Title harus diisi',
+            'berita_title.unique' => 'Berita ini sudah di-share di platform tersebut',
             'platform.required' => 'Platform harus diisi',
             'url_berita.required' => 'URL Berita harus diisi',
             'tanggal_share.required' => 'Tanggal Share harus diisi',
-            'pegawai_id.exists' => 'Pegawai ID tidak ditemukan',
             'tanggal_share.date' => 'Tanggal Share harus berupa tanggal',
-            'berita_title.string' => 'Berita Title harus berupa string',
-            'platform.string' => 'Platform harus berupa string',
-            'url_berita.string' => 'URL Berita harus berupa string',
-            'tanggal_share.string' => 'Tanggal Share harus berupa string',
         ];
     }
 }

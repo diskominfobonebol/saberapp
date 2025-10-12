@@ -20,5 +20,6 @@ Route::prefix('/')->middleware('auth:sanctum')->group(function () {
 
     Route::prefix('share-berita')->middleware('role:pegawai')->group(function () {
         Route::post('/store', [ShareBeritaController::class, 'store']);
+        Route::get('/{id}', [ShareBeritaController::class, 'index']);
     });
 });
