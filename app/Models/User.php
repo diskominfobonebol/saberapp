@@ -10,8 +10,11 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 
-class User extends Authenticatable
+// TAMBAHAN 2: Tambahkan "implements FilamentUser"
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles, HasApiTokens;
@@ -38,8 +41,6 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
-
 
     /**
      * Get the attributes that should be cast.
@@ -76,5 +77,16 @@ class User extends Authenticatable
     public function opd()
     {
         return $this->hasOne(Opd::class);
+    }
+
+
+    // TAMBAHAN 3: Method untuk otorisasi Filament
+    public function canAccessPanel(Panel $panel): bool
+    {
+        if (env('APP_ENV') == 'production') {
+            // Izinkan semua pengguna yang berhasil login untuk mengakses panel.
+            return true;
+        }
+        return true;
     }
 }

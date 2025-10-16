@@ -22,4 +22,6 @@ Route::prefix('/')->middleware('auth:sanctum')->group(function () {
         Route::post('/store', [ShareBeritaController::class, 'store']);
         Route::get('/{id}', [ShareBeritaController::class, 'index']);
     });
+    Route::get('/get-ranking-berita-perperson', [ShareBeritaController::class, 'getRankingBeritaPerPerson']);
+    Route::get('/get-ranking-berita-perperson-per-opd', [ShareBeritaController::class, 'getRankingBeritaPerPersonPerOpd']);
 });

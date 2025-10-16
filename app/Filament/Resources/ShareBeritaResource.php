@@ -31,14 +31,27 @@ class ShareBeritaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('pegawai.nama'),
+                Tables\Columns\TextColumn::make('pegawai.nama')->searchable(),
+                Tables\Columns\TextColumn::make('pegawai.opd.nama_opd'),
                 Tables\Columns\TextColumn::make('berita_title'),
                 Tables\Columns\TextColumn::make('platform'),
                 Tables\Columns\TextColumn::make('url_berita'),
                 Tables\Columns\TextColumn::make('tanggal_share'),
+
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('pegawai.nama')
+                    ->relationship('pegawai', 'nama'),
+                Tables\Filters\SelectFilter::make('pegawai.opd_id')
+                    ->relationship('pegawai.opd', 'nama_opd')
+                    ->preload(),
+                Tables\Filters\SelectFilter::make('platform')
+                    ->options([
+                        'whatsapp' => 'WhatsApp',
+                        'facebook' => 'Facebook',
+                        'instagram' => 'Instagram',
+                        'twitter' => 'Twitter',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

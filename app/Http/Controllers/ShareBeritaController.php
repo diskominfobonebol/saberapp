@@ -7,6 +7,7 @@ use App\Http\Requests\ShareBerita\ShareBeritaRequestStore;
 use App\Http\Resources\ShareBeritaResource;
 use App\Models\ShareBerita;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ShareBeritaController extends Controller
@@ -41,6 +42,53 @@ class ShareBeritaController extends Controller
             'code' => 200,
             'message' => 'Share Berita berhasil diambil',
             'data' => ShareBeritaResource::collection($shareBeritas),
+        ]);
+    }
+
+    public function getRankingBeritaPerPerson()
+    {
+        $rankingBeritaPerPerson = ShareBerita::join('pegawais', 'share_beritas.pegawai_id', '=', 'pegawais.id')
+            ->join('opds', 'pegawais.opd_id', '=', 'opds.id')
+            ->select(
+                'share_beritas.pegawai_id',
+                'pegawais.nama as pegawai_nama',
+                'opds.id as opd_id',
+                'opds.nama_opd as nama_opd',
+                DB::raw('COUNT(share_beritas.id) as total_share')
+            )
+            ->groupBy('share_beritas.pegawai_id', 'pegawais.nama', 'opds.id', 'opds.nama_opd')
+            ->orderByDesc('total_share')
+            ->get();
+
+        return response()->json([
+            'status' => true,
+            'code' => 200,
+            'message' => 'Ranking Berita Per Person berhasil diambil',
+            'data' => $rankingBeritaPerPerson,
+        ]);
+    }
+
+
+    public function getRankingBeritaPerPersonPerOpd()
+    {
+        $rankingBeritaPerPersonPerOpd = DB::table('share_beritas')
+            ->join('pegawais', 'share_beritas.pegawai_id', '=', 'pegawais.id')
+            ->join('opds', 'pegawais.opd_id', '=', 'opds.id')
+            ->select(
+                'opds.id as opd_id',
+                'opds.nama_opd',
+                DB::raw('COUNT(DISTINCT pegawais.id) as total_pegawai_share'),
+                DB::raw('COUNT(share_beritas.id) as total_share')
+            )
+            ->groupBy('opds.id', 'opds.nama_opd')
+            ->orderByDesc('total_pegawai_share')
+            ->get();
+
+        return response()->json([
+            'status' => true,
+            'code' => 200,
+            'message' => 'Total pegawai yang melakukan share per OPD berhasil diambil',
+            'data' => $rankingBeritaPerPersonPerOpd,
         ]);
     }
 }

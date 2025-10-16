@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('pegawai_id')->constrained('pegawais')->cascadeOnDelete();
             $table->string('berita_id');
             $table->string('berita_title');
-            $table->enum('platform', ['whatsapp', 'facebook', 'instagram', 'telegram', 'email'])->default('whatsapp');
+            $table->enum('platform', ['whatsapp', 'facebook', 'instagram', 'twitter', 'email', 'telegram'])->default('whatsapp');
             $table->string('url_berita');
             $table->date('tanggal_share');
             $table->timestamps();

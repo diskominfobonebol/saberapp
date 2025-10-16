@@ -30,7 +30,8 @@ class ShareBeritaRequestStore extends FormRequest
                 'string',
                 Rule::unique('share_beritas', 'berita_title')
                     ->where(function ($query) {
-                        return $query->where('platform', $this->platform);
+                        return $query->where('platform', $this->platform)
+                            ->where('pegawai_id', $this->pegawai_id);
                     }),
             ],
             'platform' => 'required|string',

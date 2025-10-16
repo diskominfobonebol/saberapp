@@ -106,11 +106,12 @@ class PegawaiResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->searchable(),
                 Tables\Columns\TextColumn::make('nip')->searchable(),
-                Tables\Columns\TextColumn::make('opd.nama_opd'),
+                Tables\Columns\TextColumn::make('opd.nama_opd')->searchable(),
                 Tables\Columns\TextColumn::make('user.name'),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('opd_id')
+                    ->relationship('opd', 'nama_opd'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
