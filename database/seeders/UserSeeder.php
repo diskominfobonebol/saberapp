@@ -25,25 +25,42 @@ class UserSeeder extends Seeder
             Role::create(['name' => $role, 'guard_name' => 'web']);
         }
 
-        $admin = User::create([
-            'name' => 'Admin',
-            'email' => 'admin@admin.com',
-            'nip' => '1234567890',
-            'username' => 'admin',
-            'password' => Hash::make('password'),
-        ]);
+        if (env('APP_ENV') == 'production') {
+            $admin = User::create([
+                'name' => 'Admin',
+                'email' => 'admin@admin.com',
+                'nip' => '1234567890',
+                'username' => 'admin',
+                'password' => Hash::make('adminmotayada2025#'),
+            ]);
+
+            $user = User::create([
+                'name' => 'User',
+                'email' => 'user@user.com',
+                'nip' => '1234567890',
+                'username' => 'user',
+                'password' => Hash::make('adminmotayada2025#'),
+            ]);
+        } else {
+            $admin = User::create([
+                'name' => 'Admin',
+                'email' => 'admin@admin.com',
+                'nip' => '1234567890',
+                'username' => 'admin',
+                'password' => Hash::make('password'),
+            ]);
+
+            $user = User::create([
+                'name' => 'User',
+                'email' => 'user@user.com',
+                'nip' => '1234567890',
+                'username' => 'user',
+                'password' => Hash::make('password'),
+            ]);
+        }
+
+
         $admin->assignRole('admin');
-
-
-
-        $user = User::create([
-            'name' => 'User',
-            'email' => 'user@user.com',
-            'nip' => '1234567890',
-            'username' => 'user',
-            'password' => Hash::make('password'),
-        ]);
-
         $user->assignRole('user');
     }
 }

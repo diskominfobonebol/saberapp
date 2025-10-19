@@ -34,7 +34,7 @@ class ShareBeritaRequestStore extends FormRequest
                             ->where('pegawai_id', $this->pegawai_id);
                     }),
             ],
-            'platform' => 'required|string',
+            'platform' => 'required|in:whatsapp,facebook,instagram,twitter,email,telegram,x',
             'url_berita' => 'required|string',
             'tanggal_share' => 'required|date',
         ];
@@ -49,6 +49,7 @@ class ShareBeritaRequestStore extends FormRequest
             'berita_title.required' => 'Berita Title harus diisi',
             'berita_title.unique' => 'Berita ini sudah di-share di platform tersebut',
             'platform.required' => 'Platform harus diisi',
+            'platform.in' => 'Platform harus berupa whatsapp, facebook, instagram, twitter, email, telegram, atau x',
             'url_berita.required' => 'URL Berita harus diisi',
             'tanggal_share.required' => 'Tanggal Share harus diisi',
             'tanggal_share.date' => 'Tanggal Share harus berupa tanggal',

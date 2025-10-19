@@ -3,50 +3,41 @@
 namespace App\Filament\Widgets;
 
 use App\Models\ShareBerita;
-use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\DB;
 
-class ShareBeritaTrendChart extends ChartWidget
+class ShareBeritaPerOpdChart extends ChartWidget
 {
-    protected static ?string $heading = '📈 Tren Kenaikan Jumlah Share Berita';
-
+    protected static ?string $heading = '📊 Jumlah Share Berita per OPD';
     protected int|string|array $columnSpan = 'full';
 
     protected function getData(): array
     {
-        // Ambil data share berita per hari selama 30 hari terakhir
+        // Ambil data jumlah share per OPD
         $data = ShareBerita::select(
-            DB::raw('DATE(tanggal_share) as tanggal'),
-            DB::raw('COUNT(*) as total_share')
+            'opds.nama_opd',
+            DB::raw('COUNT(share_beritas.id) as total_share')
         )
-            ->where('tanggal_share', '>=', Carbon::now()->subDays(30))
-            ->groupBy('tanggal')
-            ->orderBy('tanggal')
+            ->join('pegawais', 'share_beritas.pegawai_id', '=', 'pegawais.id')
+            ->join('opds', 'pegawais.opd_id', '=', 'opds.id')
+            ->groupBy('opds.nama_opd')
+            ->orderByDesc('total_share')
             ->get();
-
-        $labels = $data->pluck('tanggal')->map(function ($date) {
-            return Carbon::parse($date)->translatedFormat('d M');
-        });
-
-        $values = $data->pluck('total_share');
 
         return [
             'datasets' => [
                 [
                     'label' => 'Jumlah Share',
-                    'data' => $values,
-                    'fill' => false,
-                    'tension' => 0.3, // bikin garis agak halus
+                    'data' => $data->pluck('total_share'),
                 ],
             ],
-            'labels' => $labels,
+            'labels' => $data->pluck('nama_opd'),
         ];
     }
 
     protected function getType(): string
     {
-        return 'line';
+        return 'bar';
     }
 
     protected function getOptions(): array

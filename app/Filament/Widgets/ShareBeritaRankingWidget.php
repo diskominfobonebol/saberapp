@@ -66,4 +66,19 @@ class ShareBeritaRankingWidget extends ChartWidget
     {
         return 'line'; // bisa diubah ke 'bar' kalau mau batang per hari
     }
+
+    protected function getOptions(): array
+    {
+        return [
+            'scales' => [
+                'y' => [
+                    'beginAtZero' => true, // Memastikan grafik mulai dari 0
+                    'ticks' => [
+                        'precision' => 0,  // Kunci: Memaksa angka bulat (tanpa desimal)
+                        // 'stepSize' => 1, // Opsional: Memaksa langkah minimal 1
+                    ],
+                ],
+            ],
+        ];
+    }
 }

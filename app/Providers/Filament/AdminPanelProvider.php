@@ -17,6 +17,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
@@ -27,7 +28,10 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->brandName('SaberApp')
+            ->brandName('Motayada Apps')
+            ->brandLogo(Storage::url('mainLogo.png') ?? "kosong")
+            ->brandLogoHeight('8rem')
+            ->favicon(Storage::url('favIcon.png') ?? "kosong")
             ->login()
             ->colors([
                 'primary' => Color::Amber,
