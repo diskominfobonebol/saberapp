@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OpdController;
 use App\Http\Controllers\ShareBeritaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,4 +25,6 @@ Route::prefix('/')->middleware('auth:sanctum')->group(function () {
     });
     Route::get('/get-ranking-berita-perperson', [ShareBeritaController::class, 'getRankingBeritaPerPerson']);
     Route::get('/get-ranking-berita-perperson-per-opd', [ShareBeritaController::class, 'getRankingBeritaPerPersonPerOpd']);
+
+    Route::get('/get-opd-summary', [OpdController::class, 'getOpdSummary']);
 });
