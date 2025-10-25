@@ -16,7 +16,9 @@ class ShareBeritaResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'pegawai_id' => optional($this->pegawai)->nama,
+            'pegawai_nama' => optional($this->pegawai)->nama,
+            'pegawai_id' => optional($this->pegawai)->id,
+            'pegawai_nip' => optional($this->pegawai)->nip,
             'berita_id' => $this->berita_id,
             'berita_title' => $this->berita_title,
             'platform' => $this->platform,
