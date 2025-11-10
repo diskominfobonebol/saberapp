@@ -10,7 +10,7 @@ class SummaryOpdNotShareResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @return array<string, mixed>
+     * @return array<string, mixed>p
      */
     public function toArray(Request $request): array
     {
